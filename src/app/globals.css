@@ -1,21 +1,223 @@
+@import "stream-chat-react/dist/css/v2/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-y: scroll;
+  
+}
+.str-chat__message-input {
+  background-color: #000;
+  border-top: 1px solid #4b5563; /* Add a solid border with 2px thickness and the specified color *//* Optional: Add rounded corners */
+  padding: 8px; /* Optional: Add padding inside the input for better aesthetics */
+}
+.str-chat__message-textarea-with-emoji-picker {
+  background-color: #1d1f21;
+  border-radius: 100px;
+  
+  height: 3.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
+.str-chat__channel-list-react {
+  background-color:#000;
+}
+
+.str-chat__message-actions-box{
+  background-color:#000;
+  border: 1px solid #4b5563;
+
+}
+str-chat__channel-search-input--wrapper{
+  border: 1px solid #fff;
+}
+
+
+.str-chat__message-actions-box-button:hover {
+  background-color: #121212;
+}
+
+
+.str-chat__channel-header {
+  background-color:#000;
+}
+.str-chat__channel-search input {
+  font-size: large;
+}
+.str-chat__channel-search button {
+  display: none;
+}
+
+.str-chat__date-separator{
+  display: none;
+}
+
+.str-chat-channel-list {
+  border-right: none;
+}
+
+.str-chat__channel-list-react .str-chat__channel-list-messenger-react {
+  padding-bottom: 0;
+}
+
+.str-chat__channel-search-bar-button--exit-search {
+  display: none;
+}
+.str-chat {
+  width: 100%;
+  border:none;
+  --str-chat__primary-color: #1DA1F2;
+  --str-chat__text-color:#ffff;
+  --str-chat__channel-list-messenger-react__main:#000;
+  --str-chat__surface-color:#000;
+  --str-chat__text-color-secondary:#fff;
+  --str-chat__background-color:#000;
+  --str-chat__secondary-surface-color: #121212;
+  --str-chat__background-color-primary:#000;
+  --str-chat__active-primary-color: #1DA1F2;
+  --str-chat__border-color:#121212;
+  --str-chat__surface-color: #121212;
+  --str-chat__secondary-surface-color: #121212;
+  --str-chat__primary-surface-color: #1DA1F2;
+  --str-chat__primary-surface-color-low-emphasis: #edf7f7;
+  --str-chat__border-radius-circle: 100px;
+}
+.str-chat__message-reactions-container .str-chat__message-reactions .str-chat__message-reaction.str-chat__message-reaction-own{
+  background-color: #1f2937;
+  font-size: smaller;
+
+}
+.str-chat__channel-preview-messenger--last-message{
+  color: #e5e7eb;
+  font: 400;
+}
+
+.str-chat__message-input .str-chat__send-button:disabled svg path {
+  fill: #1DA1F2;
+}
+.str-chat__loading-channel * {
+  display: none !important;
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 96%;
+    --foreground: 0 0% 3.9%;
+    --button-border: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --button-border:0 0% 100%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 30.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background-color: transparent;  
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #000;
+
+  border-radius: 4px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+
+
+
+::-webkit-scrollbar {
+  width: 16px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #121212; /* Background of the scrollbar track */
+  /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the thumb when hovered */
+}
+
+/* For Firefox */
+.scrollbar {
+  scrollbar-width: thin; /* Make the scrollbar thin */
+  scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
 }
