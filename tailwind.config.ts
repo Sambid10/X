@@ -10,18 +10,18 @@ const config: Config = {
   ],
   theme: {
   	extend: {
-		screens: {
-			'xs': '480px',      // Extra small devices (custom)
-			'sm': '640px',      // Small devices
-			'md': '768px',      // Medium devices
-			'lg': '1024px',     // Large devices
-			'xl': '1280px',     // Extra large devices
-			'2xl': '1536px',    // 2X large devices
-			'3xl': '1920px',    // 3X large devices (custom)
-		  },
+  		screens: {
+  			xs: '480px',
+  			sm: '640px',
+  			md: '768px',
+  			lg: '1024px',
+  			xl: '1280px',
+  			'2xl': '1536px',
+  			'3xl': '1920px'
+  		},
   		colors: {
-			button:'#1DA1F2',
-			hover_button:'#1a6a9c',
+  			button: '#1DA1F2',
+  			hover_button: '#1a6a9c',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
