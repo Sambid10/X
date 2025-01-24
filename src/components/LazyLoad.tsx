@@ -14,11 +14,12 @@ const usePlayIntersection = () => {
       entries.forEach(({ isIntersecting, target }) => {
         const video = target as HTMLVideoElement;
         if (isIntersecting) {
-          video.play();
-          video.muted = true; // Play video when visible
+          video.muted = true;
+          if (video.readyState >= 2) {
+            video.play().catch(() => {}); // Ensure playback doesn't throw errors
+          }
         } else {
           video.pause();
-          video.muted = true; // Pause when not visible
         }
       });
     };
@@ -26,21 +27,21 @@ const usePlayIntersection = () => {
     const rootMargin =
       window.innerWidth <= 1024 ? "50% 0% 50% 0%" : "-20% 0% -20% 0%";
     const obs = new IntersectionObserver(callback, {
-      root: null, // Observe relative to the viewport
+      root: null,
       rootMargin,
-      threshold: 0.5, // Fully visible
+      threshold: 0.5,
     });
 
     setObserver(obs);
 
     return () => {
-      obs.disconnect(); // Clean up observer on unmount
+      obs.disconnect();
     };
   }, []);
 
   const observe = useCallback(
     (el: HTMLVideoElement | null) => {
-      if (observer && el) observer.observe(el); // Attach observer to video element
+      if (observer && el) observer.observe(el);
     },
     [observer]
   );
@@ -50,39 +51,36 @@ const usePlayIntersection = () => {
 
 const LazyLoadVideo: React.FC<LazyLoadVideoProps> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const observe = usePlayIntersection(); // Use custom hook for play/pause
+  const observe = usePlayIntersection();
 
-  // Lazy loading hook
   const { ref: lazyLoadRef, inView: isNearViewport } = useInView({
-    rootMargin: "200px", // Start loading video when close to viewport
-    threshold: 0.1, // Trigger when 10% is visible
-    triggerOnce: false, // Reload when out of view
+    rootMargin: "200px",
+    threshold: 0.1,
+    triggerOnce: false,
   });
 
-  // Handle video loading and unloading
   useEffect(() => {
     if (videoRef.current) {
       if (isNearViewport) {
-        videoRef.current.src = videoUrl; // Load video when near viewport
-      }//  else {
-      //   videoRef.current.removeAttribute("src"); // Unload video when out of viewport
-      //   videoRef.current.load(); // Ensure the video element resets
-      // }
+        if (videoRef.current.src !== videoUrl) {
+          videoRef.current.src = videoUrl; // Set src when entering viewport
+        }
+      }
     }
   }, [isNearViewport, videoUrl]);
 
   return (
     <div
-      ref={lazyLoadRef} // Attach lazy-load observer
+      ref={lazyLoadRef}
       className="min-h-[30rem] flex items-center justify-center border border-gray-800 rounded-2xl"
     >
       <video
         ref={(el) => {
-          videoRef.current = el; // Assign ref to video
-          observe(el); // Attach play/pause observer
+          videoRef.current = el;
+          observe(el);
         }}
         loop
-        preload="metadta"
+        preload="metadata"
         muted
         controls
         className="mx-auto w-full max-h-[30rem] rounded-2xl"

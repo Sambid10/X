@@ -8,7 +8,7 @@ export default async function layout({children}:{
 }) {
     const session=await getSession()
     return (
-    <div className="flex mx-auto max-w-7xl  relative md:justify-start lg:justify-center md:pl-12 lg:pl-0 min-h-screen">
+    <div className="flex mx-auto bg-[#000] max-w-7xl  relative md:justify-start lg:justify-center md:pl-12 lg:pl-0 min-h-screen">
     {!session?.user.displayname && <DisplayNameModal />}
     <AppSidebar />
     <main className='w-[100%] sm:w-[100%] md:max-w-[70%] lg:w-[53%] xl:w-[48%] min-h-[105vh] border-r border-gray-600 relative'>

@@ -7,6 +7,7 @@ import { RightTooltipDemo } from './RightSideToolTip'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense, use } from 'react'
+import { formatNumber } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import Divskeleton from '@/components/ui/Divskeleton'
 import CustomFollowButton from '@/components/ui/CustomFollowButton'
@@ -161,9 +162,9 @@ export async function TrendingTopics({className}:{
                 return (
                     <Link key={title} href={`/hastag/${title}`} className={cn('block  px-4  py-1 hover:bg-[#121212] ease-in duration-200 transition-colors',className)}>
                         <p title={hashtag} className='hover:underline text-base tracking-wide font-light text-blue-400'>
-                            {hashtag} posts
+                            {hashtag}
                         </p>
-                        
+                        <p className='text-sm font-normal text-gray-200'>{formatNumber(count)}&nbsp;{count === 1 ? "post" : "posts"}</p>
                     </Link>
                 )
             }
