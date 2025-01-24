@@ -6,7 +6,7 @@ import { NextRequest } from "next/server"
 export async function GET(req:NextRequest) {
     try{
         const cursor=req.nextUrl.searchParams.get("cursor") || undefined
-        const pageSize=10
+        const pageSize=5
         const session=await getSession()
         if(!session?.user.id) return Response.json({error:"Unauthirized"},{status:401})
         const post=await db.post.findMany({
