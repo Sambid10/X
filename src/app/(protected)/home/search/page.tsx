@@ -9,7 +9,7 @@ interface PageProps {
 }
  
 export async function generateMetadata({ searchParams }: PageProps):Promise<Metadata> {
-    const {q}=await searchParams
+    const {q}= await searchParams
     return {
         title:`Search results for "${q}"`
     };
