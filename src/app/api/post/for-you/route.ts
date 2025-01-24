@@ -1,30 +1,53 @@
-import { db } from "@/lib/db"
-import getSession from "@/lib/getSession"
-import { getPostDataInclude, PostPage } from "@/lib/types"
-import { NextRequest } from "next/server"
-export async function GET(req:NextRequest){
-    try{
+import { db } from "@/lib/db";
+import getSession from "@/lib/getSession";
+import { getPostDataInclude, PostPage } from "@/lib/types";
+import { NextRequest } from "next/server";
 
-        const session=await getSession()
-        if(!session?.user.id)  return Response.json({error:"Unauthorzied"},{status:401})
-        const pageSize=10
-        const cursor=req.nextUrl.searchParams.get("cursor") || undefined
-        const followingPost=await db.post.findMany({
-           include:getPostDataInclude(session.user.id),
-           take:pageSize+1,
-           cursor:cursor ? {id:cursor} : undefined,
-           orderBy:{
-            createdAt:"desc"
-           }
-        })
-        const nextcusror=followingPost.length > pageSize ? followingPost[pageSize].id : null
-        const data:PostPage={
-            nextCursor:nextcusror,
-            posts:followingPost.slice(0,pageSize)
+export async function GET(req: NextRequest) {
+    const startTime = Date.now(); // Start time for logging
+    try {
+        // Extract cursor and set default page size
+        const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+        const pageSize = 5;
+
+        // Fetch session to verify user
+        const session = await getSession();
+        if (!session?.user.id) {
+            return new Response(
+                JSON.stringify({ error: "Unauthorized" }),
+                { status: 401, headers: { "Content-Type": "application/json" } }
+            );
         }
-        return Response.json(data)
-    }catch(err){
-        console.log(err)
-        return Response.json({error:"Server Error"},{status:501})
+
+        // Query posts from the database
+        const posts = await db.post.findMany({
+            include: getPostDataInclude(session.user.id),
+            orderBy: { createdAt: "desc" },
+            take: pageSize + 1, // Fetch one extra post to check for the next cursor
+            ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
+        });
+
+        // Determine the next cursor
+        const nextCursor = posts.length > pageSize ? posts[pageSize].id : null;
+
+        // Prepare response data
+        const data: PostPage = {
+            posts: posts.slice(0, pageSize),
+            nextCursor,
+        };
+
+        console.log(`Query completed in ${Date.now() - startTime}ms`); // Log execution time
+
+        return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+
+        return new Response(
+            JSON.stringify({ error: "Internal Server Error" }),
+            { status: 500, headers: { "Content-Type": "application/json" } }
+        );
     }
 }
